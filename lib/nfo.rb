@@ -1,3 +1,13 @@
+# -*- coding: utf-8 -*-
+# This class aims to create a nfo file using an xml file from Cine Passion
+# = Other Stuff
+# Author:: Ogrinou
+#  Copyright:: Copyright (c) 2010 Ogrinou
+# License::   Distributes under the same terms as Ruby
+#
+# == Warranty
+# This software is provided "as is" and without any express or implied warranties, including, without limitation, the implied warranties of merchantibility and fitness for a particular purpose.
+
 require 'rexml/document'
 include REXML
 
@@ -67,8 +77,9 @@ class Nfo
     @content.write($stdout)
   end
 
-  private
 
+  private
+  # Helper function to join different elements into one
   def joinElements(xmldoc, element_name, separator=", ")
     result=[]
     xmldoc.each_element(element_name) { |e|
