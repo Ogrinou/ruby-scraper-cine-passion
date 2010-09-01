@@ -11,11 +11,13 @@
 #
 # == Warranty
 # This software is provided "as is" and without any express or implied warranties, including, without limitation, the implied warranties of merchantibility and fitness for a particular purpose.
+# CoAuthor::  Ogrinou
 
 require 'uri'
 require 'net/http'
 require 'rexml/document'
 include REXML
+
 
 class CinePassion
   attr_reader :xml_data, :movies_info, :result_nb, :status, :quota, :apikey, :siteurl, :proxyinfo
@@ -210,6 +212,25 @@ class CinePassion
     movie_info['nfo']['Camelot']['en'] = "#{nfo_camelot}&Lang=en&OK=1"
     
     return movie_info
+  end
+  
+  def ScrapAnalyseOneMovieById(id)
+    conn = Net::HTTP::Proxy(@proxy_host, @proxy_port, @proxy_user, @proxy_password)
+    movie_info = {}
+    
+    query="ID" 
+    lang="fr" # / en"
+    format="XML"
+    ## http://passion-xbmc.org/scraper/API/1/Movie.GetInfo/ID/fr/XML/e9794b0aaa564c443b0959d5c436fb8b/26840
+    movie_api_url="#{@siteurl}/scraper/API/1/Movie.GetInfo/#{query}/#{lang}/#{format}/#{@apikey}/#{id}"
+    
+    url = URI.parse(URI.escape(movie_api_url))
+        res = conn.start(url.host, url.port) {|http|
+        http.get(url.path)
+    }
+    
+    xml = res.body
+    xml
   end
   
   # Scrap get a filename with garbage information & clean it
