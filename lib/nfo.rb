@@ -2,7 +2,7 @@
 # This class aims to create a nfo file using an xml file from Cine Passion
 # = Other Stuff
 # Author:: Ogrinou
-#  Copyright:: Copyright (c) 2010 Ogrinou
+# Copyright:: Copyright (c) 2010 Ogrinou
 # License::   Distributes under the same terms as Ruby
 #
 # == Warranty
@@ -51,13 +51,16 @@ class Nfo
 
     movie.add_element("director").add_text(joinElements(root.elements['directors'],'director'))
 
-    root.elements['casting'].each_element('person') { |e|
-      tmp= movie.add_element("actor")
-      tmp.add_element("name").add_text(e.attribute("name").to_s)
-      tmp.add_element("role").add_text(e.attribute("character").to_s)
-      tmp.add_element("thumb").add_text(e.attribute("thumb").to_s)
-    }
-
+    begin
+      root.elements['casting'].each_element('person') { |e|
+        tmp= movie.add_element("actor")
+        tmp.add_element("name").add_text(e.attribute("name").to_s)
+        tmp.add_element("role").add_text(e.attribute("character").to_s)
+        tmp.add_element("thumb").add_text(e.attribute("thumb").to_s)
+      }
+    rescue
+      movie.add_element("actor")
+    end
   end
 
 
