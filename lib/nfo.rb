@@ -14,7 +14,9 @@ include REXML
 # http://wiki.xbmc.org/index.php?title=Import_-_Export_Library#Video_nfo_Files
 
 class Nfo
-  attr_accessor :content
+  attr_reader :content
+  
+  
   def initialize(xml_string)
     doc = Document.new(xml_string)
     root= doc.root
@@ -35,7 +37,7 @@ class Nfo
     movie.add_element("plot").add_text(root.elements["plot"].text.to_s.strip)
     movie.add_element("tagline").add_text(root.elements["tagline"].text.to_s.strip)
     movie.add_element("runtime").add_text("#{root.elements["runtime"].text.to_s.strip} min")
-    movie.add_element("thumb").add_text("")
+    movie.add_element("thumb").add_text(root.elements["thumbs"]? root.elements["thumbs"].text.to_s.strip : "")
     movie.add_element("mpaa").add_text(root.elements["information"].text.to_s.strip)
     movie.add_element("playcount").add_text("")
     movie.add_element("watched").add_text("false")
@@ -90,6 +92,5 @@ class Nfo
     }
     result.join(separator)
   end
-
 
 end
